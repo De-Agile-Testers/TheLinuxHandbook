@@ -1,0 +1,90 @@
+---
+name: "Bump Asciidoctor-Mathematical version"
+
+scms:
+  default:
+    kind: github
+    spec:
+      user: "{{ .github.user }}"
+      email: "{{ .github.email }}"
+      owner: "{{ requiredEnv .github.owner }}"
+      repository: "{{ requiredEnv .github.repository }}"
+      token: "{{ requiredEnv .github.token }}"
+      username: "{{ .github.username }}"
+      branch: "{{ .github.branch }}"
+
+sources:
+  latestVersion:
+    kind: githubrelease
+    name: "Get the latest Asciidoctor-Mathematical version"
+    spec:
+      owner: "asciidoctor"
+      repository: "asciidoctor-mathematical"
+      token: "{{ requiredEnv .github.token }}"
+      username: "{{ .github.username }}"
+      versionfilter:
+        kind: latest
+    transformers:
+      - trimprefix: "v"
+
+conditions:
+  testDockerfileArgVersion:
+    name: "Does the Dockerfile have an ARG instruction which key is asciidoctor_mathematical_version?"
+    kind: dockerfile
+    disablesourceinput: true
+    spec:
+      file: Dockerfile
+      instruction:
+        keyword: "ARG"
+        matcher: "asciidoctor_mathematical_version"
+  testVersionInReadme:
+    name: "Does the README.adoc have a variable ASCIIDOCTOR_MATHEMATICAL_VERSION"
+    kind: file
+    disablesourceinput: true
+    spec:
+      file: README.adoc
+      matchpattern: '(?m:^:ASCIIDOCTOR_MATHEMATICAL_VERSION:.*)'
+  testVersionInTestHarness:
+    name: "Does the test harness have variable ASCIIDOCTOR_MATHEMATICAL_VERSION"
+    kind: file
+    disablesourceinput: true
+    spec:
+      file: tests/asciidoctor.bats
+      matchpattern: '(?m:^ASCIIDOCTOR_MATHEMATICAL_VERSION=.*)'
+
+targets:
+  updateDockerfile:
+    name: "Update the value of ARG asciidoctor_mathematical_version in the Dockerfile"
+    kind: dockerfile
+    spec:
+      file: Dockerfile
+      instruction:
+        keyword: "ARG"
+        matcher: "asciidoctor_mathematical_version"
+    scmid: default
+  updateTestHarness:
+    name: "Update the key ASCIIDOCTOR_MATHEMATICAL_VERSION in the test harness"
+    kind: file
+    spec:
+      file: tests/asciidoctor.bats
+      matchpattern: '(?m:^ASCIIDOCTOR_MATHEMATICAL_VERSION=.*)'
+      content: 'ASCIIDOCTOR_MATHEMATICAL_VERSION={{ source `latestVersion` }}'
+    scmid: default
+  updateReadme:
+    name: "Update the key ASCIIDOCTOR_MATHEMATICAL_VERSION in the README.adoc file"
+    kind: file
+    spec:
+      file: README.adoc
+      matchpattern: '(?m:^:ASCIIDOCTOR_MATHEMATICAL_VERSION:.*)'
+      content: ':ASCIIDOCTOR_MATHEMATICAL_VERSION: {{ source `latestVersion` }}'
+    scmid: default
+
+actions:
+  default:
+    kind: github/pullrequest
+    scmid: default
+    title: Bump Asciidoctor-Kramdown version to {{ source "latestVersion" }}
+    spec:
+      labels:
+        - chore
+        - dependencies

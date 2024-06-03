@@ -1,0 +1,94 @@
+== Piping Mechanism in Linux
+
+In Linux, piping is a powerful mechanism that allows the output of one command to be used as the input for another command. This is achieved using the pipe symbol (`|`). Piping is particularly useful for software testers as it enables the chaining of commands to perform complex tasks efficiently.
+
+When you use a pipe, the shell takes the standard output (stdout) of the command on the left side of the pipe and feeds it as the standard input (stdin) to the command on the right side of the pipe. This allows for the combination of simple commands to create more complex and useful operations.
+
+=== Example 1: Finding and Counting Lines Containing a Specific Pattern
+
+Suppose you have a log file `application.log` and you want to find out how many times the word "ERROR" appears.
+
+[source, bash]
+----
+$ grep "ERROR" application.log | wc -l
+----
+
+* `grep "ERROR" application.log`: This command searches for the word "ERROR" in the log file.
+* `wc -l`: This command counts the number of lines. The pipe connects the output of `grep` to `wc`, counting the number of lines containing "ERROR".
+
+=== Example 2: Listing and Sorting Files by Size
+
+To list all files in a directory and sort them by size, you can use:
+
+[source, bash]
+----
+$ ls -lS | awk '{print $5, $9}'
+----
+
+* `ls -lS`: Lists files in long format and sorts them by size.
+* `awk '{print $5, $9}'`: Uses `awk` to print the size (5th column) and the filename (9th column).
+
+=== Example 3: Monitoring Real-Time Log Updates and Filtering
+
+To monitor a log file in real-time and filter out only lines that contain "ERROR":
+
+[source, bash]
+----
+$ tail -f application.log | grep "ERROR"
+----
+
+* `tail -f application.log`: Displays new lines added to `application.log` in real-time.
+* `grep "ERROR"`: Filters the real-time output to show only lines that contain "ERROR".
+
+=== Example 4: Finding and Sorting Files Modified in the Last 7 Days
+
+To find files modified in the last 7 days and sort them by modification time:
+
+[source, bash]
+----
+$ find . -type f -mtime -7 | xargs ls -lt
+----
+
+* `find . -type f -mtime -7`: Finds files in the current directory (and subdirectories) modified in the last 7 days.
+* `xargs ls -lt`: Passes the list of files to `ls -lt`, which sorts them by modification time.
+
+=== Example 5: Checking Disk Usage and Sorting
+
+To check the disk usage of all directories in the current directory and sort them by size:
+
+[source, bash]
+----
+$ du -sh * | sort -h
+----
+
+* `du -sh *`: Displays the disk usage of each directory in a human-readable format.
+* `sort -h`: Sorts the output by size, with human-readable suffixes.
+
+=== Example 6: Extracting and Analyzing Test Results
+
+To extract lines containing "Test Result" from a test results file and summarize the outcomes:
+
+[source, bash]
+----
+$ grep "Test Result" results.txt | awk '{print $3}' | sort | uniq -c
+----
+
+* `grep "Test Result" results.txt`: Finds lines containing "Test Result".
+* `awk '{print $3}'`: Extracts the third column (assumed to be the result status, like PASS/FAIL).
+* `sort`: Sorts the extracted results.
+* `uniq -c`: Counts the occurrences of each unique result.
+
+=== Example 7: Combining Multiple Filters
+
+To find all Python files, check their syntax, and display errors:
+
+[source, bash]
+----
+$ find . -name "*.py" | xargs -I {} python -m py_compile {} 2>&1 | grep "SyntaxError"
+----
+
+* `find . -name "*.py"`: Finds all Python files.
+* `xargs -I {} python -m py_compile {}`: Compiles each Python file to check for syntax errors.
+* `2>&1`: Redirects stderr to stdout.
+* `grep "SyntaxError"`: Filters the output to show only syntax errors.
+

@@ -1,0 +1,21 @@
+= [purple]#The Linux Command Line Guide#
+:doctype: book
+:toc: macro
+:toclevels: 2
+:pdf-theme: DAT.yml
+:pdf-fontsdir: fonts
+:sectnums:
+
+:title-logo-image: image:DAT.png[top=25%,align=center,pdfwidth=0.5in]
+
+toc::[]
+
+include::chapters/01.Introduction.adoc[]
+include::chapters/02.FileSystem.adoc[]
+include::chapters/03.text-processing.adoc[]
+include::chapters/04.process-management.adoc[]
+include::chapters/05.network.adoc[]
+include::chapters/06.system-monitoring.adoc[]
+include::chapters/07.package-management.adoc[]
+include::chapters/08.version-control.adoc[]
+include::chapters/09.command-output-processing.adoc[]

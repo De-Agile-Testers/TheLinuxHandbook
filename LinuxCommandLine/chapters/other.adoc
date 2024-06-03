@@ -1,0 +1,93 @@
+== Automation and Scripting Commands
+
+=== `crontab` - Schedule Commands Periodically
+
+The `crontab` command is used to schedule commands to be executed periodically.
+
+.Example: Edit the crontab file
+[source, bash]
+----
+$ crontab -e
+----
+
+=== `at` - Schedule Commands Once
+
+The `at` command is used to schedule commands to be executed once.
+
+.Example: Schedule a command to run in 1 hour
+[source, bash]
+----
+$ at now + 1 hour
+----
+
+=== `bash` - GNU Bourne-Again SHell
+
+The `bash` command is used to run a bash script.
+
+.Example: Run a bash script
+[source, bash]
+----
+$ bash script.sh
+----
+
+=== `chmod` - Change File Modes
+
+The `chmod` command is used to change file modes or Access Control Lists.
+
+.Example: Make a script executable
+[source, bash]
+----
+$ chmod +x script.sh
+----
+
+== Debugging and Testing Commands
+
+=== `strace` - Trace System Calls and Signals
+
+The `strace` command is used to trace system calls and signals.
+
+.Example: Trace a command and write to a file
+[source, bash]
+----
+$ strace -o output.txt command
+----
+
+=== `gdb` - The GNU Debugger
+
+The `gdb` command is used to debug programs.
+
+.Example: Start debugging a program
+[source, bash]
+----
+$ gdb program
+----
+
+=== `valgrind` - Dynamic Analysis Tools
+
+The `valgrind` command is used for building dynamic analysis tools.
+
+.Example: Check for memory leaks
+[source, bash]
+----
+$ valgrind --leak-check=yes ./program
+----
+
+=== `diff` - Compare Files Line by Line
+
+The `diff` command is used to compare files line by line.
+
+.Example: Show differences between two files
+[source, bash]
+----
+$ diff file1.txt file2.txt
+----
+
+=== `patch` - Apply a Diff File
+
+The `patch` command is used to apply a diff file to an original.
+
+.Example: Apply changes to files
+[source, bash]
+----
+$ patch < changes.diff
+----

@@ -1,0 +1,90 @@
+---
+name: "Bump Asciidoctor-Kramdown version"
+
+scms:
+  default:
+    kind: github
+    spec:
+      user: "{{ .github.user }}"
+      email: "{{ .github.email }}"
+      owner: "{{ requiredEnv .github.owner }}"
+      repository: "{{ requiredEnv .github.repository }}"
+      token: "{{ requiredEnv .github.token }}"
+      username: "{{ .github.username }}"
+      branch: "{{ .github.branch }}"
+
+sources:
+  latestVersion:
+    kind: githubrelease
+    name: "Get the latest Asciidoctor-Kramdown version"
+    spec:
+      owner: "asciidoctor"
+      repository: "kramdown-asciidoc"
+      token: "{{ requiredEnv .github.token }}"
+      username: "{{ .github.username }}"
+      versionfilter:
+        kind: latest
+    transformers:
+      - trimprefix: "v"
+
+conditions:
+  testDockerfileArgVersion:
+    name: "Does the Dockerfile have an ARG instruction which key is kramdown_asciidoc_version?"
+    kind: dockerfile
+    disablesourceinput: true
+    spec:
+      file: Dockerfile
+      instruction:
+        keyword: "ARG"
+        matcher: "kramdown_asciidoc_version"
+  testVersionInReadme:
+    name: "Does the README.adoc have a variable KRAMDOWN_ASCIIDOC_VERSION"
+    kind: file
+    disablesourceinput: true
+    spec:
+      file: README.adoc
+      matchpattern: "(?m:^:KRAMDOWN_ASCIIDOC_VERSION:.*)"
+  testVersionInTestHarness:
+    name: "Does the test harness have variable KRAMDOWN_ASCIIDOC_VERSION"
+    kind: file
+    disablesourceinput: true
+    spec:
+      file: tests/asciidoctor.bats
+      matchpattern: "(?m:^KRAMDOWN_ASCIIDOC_VERSION=.*)"
+
+targets:
+  updateDockerfile:
+    name: "Update the value of ARG kramdown_asciidoc_version in the Dockerfile"
+    kind: dockerfile
+    spec:
+      file: Dockerfile
+      instruction:
+        keyword: "ARG"
+        matcher: "kramdown_asciidoc_version"
+    scmid: default
+  updateTestHarness:
+    name: "Update the key KRAMDOWN_ASCIIDOC_VERSION in the test harness"
+    kind: file
+    spec:
+      file: tests/asciidoctor.bats
+      matchpattern: "(?m:^KRAMDOWN_ASCIIDOC_VERSION=.*)"
+      content: 'KRAMDOWN_ASCIIDOC_VERSION={{ source `latestVersion` }}'
+    scmid: default
+  updateReadme:
+    name: "Update the key KRAMDOWN_ASCIIDOC_VERSION in the README.adoc file"
+    kind: file
+    spec:
+      file: README.adoc
+      matchpattern: "(?m:^:KRAMDOWN_ASCIIDOC_VERSION:.*)"
+      content: ':KRAMDOWN_ASCIIDOC_VERSION: {{ source `latestVersion` }}'
+    scmid: default
+
+actions:
+  default:
+    kind: github/pullrequest
+    scmid: default
+    title: Bump Asciidoctor-Kramdown version to {{ source "latestVersion" }}
+    spec:
+      labels:
+        - chore
+        - dependencies

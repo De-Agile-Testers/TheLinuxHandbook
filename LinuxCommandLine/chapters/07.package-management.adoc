@@ -1,0 +1,45 @@
+== Package Management Commands
+
+=== `pacman` - Package Manager Utility for Arch Linux and Manjaro
+
+The `pacman` command is the package manager utility for Arch Linux and Manjaro.
+
+.Example: Update the system
+[source, bash]
+----
+$ sudo pacman -Syu
+----
+
+.Example: Install a package
+[source, bash]
+----
+$ sudo pacman -S package_name
+----
+
+.Example: Remove a package
+[source, bash]
+----
+$ sudo pacman -R package_name
+----
+
+=== `yay` - AUR Helper
+
+The `yay` command is used to manage packages from the Arch User Repository (AUR).
+
+.Example: Install an AUR package
+[source, bash]
+----
+$ yay -S package_name
+----
+
+.Example: Remove an AUR package
+[source, bash]
+----
+$ yay -R package_name
+----
+
+.Example: Update all packages including AUR
+[source, bash]
+----
+$ yay -Syu
+----

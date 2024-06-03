@@ -1,0 +1,120 @@
+== Managing Command Output in Linux
+
+image::images/redirects-and-pipes.png[scale=50%]
+
+Linux provides powerful mechanisms for managing command output, including piping, redirecting, appending, and other advanced tools. These mechanisms enable users to perform complex tasks efficiently by combining simple commands. This section explains these mechanisms in detail.
+
+=== Piping
+
+Piping is a mechanism that allows the output of one command to be used as the input for another command. This is achieved using the pipe symbol (`|`). It enables chaining commands to perform complex tasks efficiently.
+
+.Example: Using `grep` and `wc` to count lines containing "ERROR"
+[source, bash]
+----
+$ grep "ERROR" application.log | wc -l
+----
+
+=== Redirecting Output to a File
+
+Redirecting output to a file involves saving the output of a command to a file instead of displaying it on the terminal. This is done using the `>` symbol. If the file already exists, it will be overwritten.
+
+.Example: Saving the output of `ls` to a file
+[source, bash]
+----
+$ ls > output.txt
+----
+
+=== Appending Output to a File
+
+Appending output to a file is similar to redirecting, but instead of overwriting the file, it adds the output to the end of the file. This is done using the `>>` symbol.
+
+.Example: Appending the output of `echo` to a file
+[source, bash]
+----
+$ echo "New log entry" >> output.txt
+----
+
+=== `tee`
+
+The `tee` command reads from standard input and writes to both standard output and one or more files simultaneously. This is useful when you want to see the output on the screen and save it to a file at the same time.
+
+[.text-center]
+image::images/tee.png[scale=50%]
+
+
+.Example: Using `tee` to write journaling output to a file and display it added with date and time
+[source, bash]
+----
+$ journalctl -f | grep --line-buffered "refused" | awk '{ print strftime("[%Y-%m-%d %H:%M:%S]"), $0; fflush(); }' | tee journalFiltered.txt
+----
+
+Below is a detailed explanation of each part of the command:
+
+1. `journalctl -f`
+    - This command continuously fetches new log entries from the systemd journal.
+    - The `-f` option makes `journalctl` follow the log, displaying new entries as they are added.
+
+2. `grep --line-buffered "refused"`
+    - The output from `journalctl` is piped to `grep` to filter for lines containing the word "refused".
+    - The `--line-buffered` option ensures that `grep` outputs each line as soon as it is matched, providing real-time filtering.
+
+3. `awk '{ print strftime("[%Y-%m-%d %H:%M:%S]"), $0; fflush(); }'`
+    - The filtered lines are then piped to `awk`, which processes each line to prepend the current date and time.
+    - `strftime("[%Y-%m-%d %H:%M:%S]")` formats the current date and time.
+    - `$0` represents the current line of input.
+    - `print` outputs the formatted date and time followed by the original line.
+    - `fflush()` ensures that `awk` flushes its output buffer after each line, maintaining real-time processing.
+
+4. `tee journalFiltered.txt`
+    - Finally, the output from `awk` is piped to `tee`.
+    - `tee` writes the output to both the console and the specified file (`journalFiltered.txt`).
+
+Using this pipeline, you can monitor logs containing "refused" in real-time, with each line prefixed by a timestamp, and save the output to a file for further analysis.
+
+
+
+=== Redirecting Standard Error
+
+You can redirect standard error (stderr) separately from standard output (stdout). This is useful for capturing error messages.
+
+.Example: Redirecting stderr to a file
+[source, bash]
+----
+$ command 2> error.log
+----
+
+=== Redirecting Both Standard Output and Standard Error
+
+You can redirect both stdout and stderr to the same file or different files.
+
+.Example: Redirecting both stdout and stderr to the same file
+[source, bash]
+----
+$ command > output.log 2>&1
+----
+
+.Example: Redirecting stdout and stderr to different files
+[source, bash]
+----
+$ command > output.log 2> error.log
+----
+
+=== `xargs`
+
+The `xargs` command builds and executes command lines from standard input. It is useful for processing a list of items and executing commands on each item.
+
+.Example: Using `xargs` to remove files listed by `find`
+[source, bash]
+----
+$ find . -name "*.tmp" | xargs rm
+----
+
+=== Process Substitution
+
+Process substitution allows you to pass the output of a command as an input to another command that expects a file. This is done using `<(command)`.
+
+.Example: Comparing the output of two commands with `diff`
+[source, bash]
+----
+$ diff <(ls dir1) <(ls dir2)
+----

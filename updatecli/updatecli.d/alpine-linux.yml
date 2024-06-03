@@ -1,0 +1,99 @@
+---
+name: "Bump Alpine Linux Version"
+
+scms:
+  default:
+    kind: github
+    spec:
+      user: "{{ .github.user }}"
+      email: "{{ .github.email }}"
+      owner: "{{ requiredEnv .github.owner }}"
+      repository: "{{ requiredEnv .github.repository }}"
+      token: "{{ requiredEnv .github.token }}"
+      username: "{{ .github.username }}"
+      branch: "{{ .github.branch }}"
+
+sources:
+  latestVersion:
+    kind: githubrelease
+    name: "Get the latest Alpine Linux version"
+    spec:
+      owner: "alpinelinux"
+      repository: "aports" # Its release process follows Alpine's
+      token: "{{ requiredEnv .github.token }}"
+      username: "{{ .github.username }}"
+      versionfilter:
+        kind: semver
+        pattern: "~3"
+    transformers:
+      - trimprefix: "v"
+
+conditions:
+  testDockerfileArg:
+    name: "Does the Dockerfile have an ARG instruction for the Alpine Linux version?"
+    kind: dockerfile
+    disablesourceinput: true
+    spec:
+      file: Dockerfile
+      instruction:
+        keyword: "ARG"
+        matcher: "alpine_version"
+  testDockerImageExists:
+    name: "Does the Docker Image exists on the Docker Hub?"
+    kind: dockerimage
+    sourceid: latestVersion
+    spec:
+      image: "alpine"
+      # tag come from the source
+      architecture: amd64
+  testVersionInReadme:
+    name: "Does the README.adoc have a variable ALPINE_VERSION"
+    kind: file
+    disablesourceinput: true
+    spec:
+      file: README.adoc
+      matchpattern: "(?m:^:ALPINE_VERSION:.*)"
+  testVersionInTestHarness:
+    name: "Does the test harness have variable ALPINE_VERSION"
+    kind: file
+    disablesourceinput: true
+    spec:
+      file: tests/asciidoctor.bats
+      matchpattern: "(?m:^ALPINE_VERSION=.*)"
+
+targets:
+  updateDockerfile:
+    name: "Update the value of the base image (ARG alpine_version) in the Dockerfile"
+    kind: dockerfile
+    spec:
+      file: Dockerfile
+      instruction:
+        keyword: "ARG"
+        matcher: "alpine_version"
+    scmid: default
+  updateTestHarness:
+    name: "Update the key ALPINE_VERSION in the test harness"
+    kind: file
+    spec:
+      file: tests/asciidoctor.bats
+      matchpattern: "(?m:^ALPINE_VERSION=.*)"
+      content: 'ALPINE_VERSION={{ source "latestVersion" }}'
+    scmid: default
+  updateReadme:
+    name: "Update the key ALPINE_VERSION in the README.adoc file"
+    kind: file
+    spec:
+      file: README.adoc
+      matchpattern: "(?m:^:ALPINE_VERSION:.*)"
+      content: ':ALPINE_VERSION: {{ source "latestVersion" }}'
+    scmid: default
+
+actions:
+  default:
+    kind: github/pullrequest
+    scmid: default
+    title: Bump Alpine Linux Version to {{ source "latestVersion" }}
+    spec:
+      labels:
+        - dependencies
+        - alpine-linux

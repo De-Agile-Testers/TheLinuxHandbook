@@ -1,0 +1,89 @@
+---
+name: "Bump Asciidoctor-Revealjs version"
+
+scms:
+  default:
+    kind: github
+    spec:
+      user: "{{ .github.user }}"
+      email: "{{ .github.email }}"
+      owner: "{{ requiredEnv .github.owner }}"
+      repository: "{{ requiredEnv .github.repository }}"
+      token: "{{ requiredEnv .github.token }}"
+      username: "{{ .github.username }}"
+      branch: "{{ .github.branch }}"
+
+sources:
+  latestVersion:
+    kind: githubrelease
+    name: "Get the latest Asciidoctor-Revealjs version"
+    spec:
+      owner: "asciidoctor"
+      repository: "asciidoctor-reveal.js"
+      token: "{{ requiredEnv .github.token }}"
+      username: "{{ .github.username }}"
+      versionfilter:
+        kind: latest
+    transformers:
+      - trimprefix: "v"
+
+conditions:
+  testDockerfileArgVersion:
+    name: "Does the Dockerfile have an ARG instruction which key is asciidoctor_revealjs_version?"
+    kind: dockerfile
+    disablesourceinput: true
+    spec:
+      file: Dockerfile
+      instruction:
+        keyword: "ARG"
+        matcher: "asciidoctor_revealjs_version"
+  testVersionInReadme:
+    name: "Does the README.adoc have a variable ASCIIDOCTOR_REVEALJS_VERSION"
+    kind: file
+    disablesourceinput: true
+    spec:
+      file: README.adoc
+      matchpattern: '(?m:^:ASCIIDOCTOR_REVEALJS_VERSION:.*)'
+  testVersionInTestHarness:
+    name: "Does the test harness have variable ASCIIDOCTOR_REVEALJS_VERSION"
+    kind: file
+    disablesourceinput: true
+    spec:
+      file: tests/asciidoctor.bats
+      matchpattern: '(?m:^ASCIIDOCTOR_REVEALJS_VERSION=.*)'
+
+targets:
+  updateDockerfile:
+    name: "Update the value of ARG asciidoctor_revealjs_version in the Dockerfile"
+    kind: dockerfile
+    spec:
+      file: Dockerfile
+      instruction:
+        keyword: "ARG"
+        matcher: "asciidoctor_revealjs_version"
+    scmid: default
+  updateTestHarness:
+    name: "Update the key ASCIIDOCTOR_REVEALJS_VERSION in the test harness"
+    kind: file
+    spec:
+      file: tests/asciidoctor.bats
+      matchpattern: '(?m:^ASCIIDOCTOR_REVEALJS_VERSION=.*)'
+      content: 'ASCIIDOCTOR_REVEALJS_VERSION={{ source `latestVersion` }}'
+    scmid: default
+  updateReadme:
+    name: "Update the key ASCIIDOCTOR_REVEALJS_VERSION in the README.adoc file"
+    kind: file
+    spec:
+      file: README.adoc
+      matchpattern: '(?m:^:ASCIIDOCTOR_REVEALJS_VERSION:.*)'
+      content: ':ASCIIDOCTOR_REVEALJS_VERSION: {{ source `latestVersion` }}'
+    scmid: default
+
+actions:
+  default:
+    kind: github/pullrequest
+    scmid: default
+    title: Bump Asciidoctor-Revealjs version to {{ source "latestVersion" }}
+    spec:
+      labels:
+        - dependencies

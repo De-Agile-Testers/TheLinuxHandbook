@@ -1,0 +1,11 @@
+---
+### Values to inject in the updatecli configuration files
+github:
+  user: "asciidoctor-updateclibot[bot]"
+  email: "asciidoctor-updateclibot[bot]@users.noreply.github.com" #
+  username: "asciidoctor-updateclibot[bot]"
+  token: "UPDATECLI_GITHUB_TOKEN" # Come from an environment variable
+  branch: "main"
+  owner: "REPO_OWNER" # Come from an environment variable
+  repository: "REPO_NAME" # Come from an environment variable
+...

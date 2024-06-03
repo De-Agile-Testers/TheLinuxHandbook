@@ -1,0 +1,41 @@
+== Version Control Commands
+
+=== `git` - Distributed Version Control System
+
+The `git` command is used for distributed version control.
+
+.Example: Clone a repository
+[source, bash]
+----
+$ git clone repo_url
+----
+
+.Example: Show the working tree status
+[source, bash]
+----
+$ git status
+----
+
+.Example: Add file contents to the index
+[source, bash]
+----
+$ git add file.txt
+----
+
+.Example: Record changes to the repository
+[source, bash]
+----
+$ git commit -m "message"
+----
+
+.Example: Update remote refs along with associated objects
+[source, bash]
+----
+$ git push origin branch_name
+----
+
+.Example: Fetch from and integrate with another repository or a local branch
+[source, bash]
+----
+$ git pull origin branch_name
+----

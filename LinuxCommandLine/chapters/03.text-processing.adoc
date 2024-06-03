@@ -1,0 +1,77 @@
+== Text Processing Commands
+
+=== `cat` - Concatenate and Display File Content
+
+The `cat` command is used to concatenate and display file content.
+
+.Example: Display file content
+[source, bash]
+----
+$ cat file.txt
+----
+
+=== `grep` - Print Lines Matching a Pattern
+
+The `grep` command is used to print lines matching a pattern.
+
+.Example: Search for a pattern in a file
+[source, bash]
+----
+$ grep 'pattern' file.txt
+----
+
+.Example: Recursively search for a pattern
+[source, bash]
+----
+$ grep -r 'pattern' /path
+----
+
+=== `awk` - Pattern Scanning and Processing Language
+
+The `awk` command is used for pattern scanning and processing.
+
+.Example: Print the first field of each line
+[source, bash]
+----
+$ awk '{print $1}' file.txt
+----
+
+=== `sed` - Stream Editor
+
+The `sed` command is used for filtering and transforming text.
+
+.Example: Replace all occurrences of `old` with `new`
+[source, bash]
+----
+$ sed 's/old/new/g' file.txt
+----
+
+=== `sort` - Sort Lines of Text Files
+
+The `sort` command is used to sort lines of text files.
+
+.Example: Sort lines in a file
+[source, bash]
+----
+$ sort file.txt
+----
+
+=== `uniq` - Report or Omit Repeated Lines
+
+The `uniq` command is used to report or omit repeated lines.
+
+.Example: Remove duplicate lines
+[source, bash]
+----
+$ sort file.txt | uniq
+----
+
+=== `wc` - Print Newline, Word, and Byte Counts
+
+The `wc` command is used to print newline, word, and byte counts for each file.
+
+.Example: Count the number of lines in a file
+[source, bash]
+----
+$ wc -l file.txt
+----

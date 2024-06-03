@@ -1,0 +1,79 @@
+# Define the theme
+extends: default
+
+# Colors
+base:
+  font_color: '000000'
+
+# Heading colors
+heading:
+  h1:
+    color: '64549f'
+    break-before: auto
+  h2:
+    break-before: auto  # Prevent page breaks before level 2 headings
+    font_color: '64549f'
+# Page layout
+page:
+  background:
+    color: '4cc7e8'
+  margin: [36, 48, 70, 48]  # top, right, bottom, left
+
+title-page-content:
+  margin-top: 0
+  margin-bottom: 0
+  text-align: center
+  line-height: 1.5
+
+image:
+  align: center
+  pdfwidth: 80%
+
+
+# Roles
+text:
+  h1:
+    color: '64549f'  # Set the color for all titles to purple
+
+role:
+  big:
+    font_size: $base_font_size_large
+  small:
+    font_size: $base_font_size_small
+  smaller:
+    font_size: $base_font_size_small * 0.8
+  tiny:
+    font_size: $base_font_size_small * 0.5
+  purple:
+    font_color: #64549f
+  red:
+    font_color: #ff0000
+  green:
+    font_color: #00aa00
+  blue:
+    font_color: #0000ff
+  cyan:
+    font_color: #00cccc
+  pink:
+    font_color: #cc00cc
+  brown:
+    font_color: #A0522D
+
+footer:
+  height: 20mm
+  line-height: 1
+  recto:
+    right:
+      content: '{chapter-title} | *{page-number}*'
+    left:
+      content: image:DAT.png[width=20%,align=left]
+  verso:
+    right:
+      content: '{chapter-title} | *{page-number}*'
+    left:
+      content: image:DAT.png[width=20%,align=left]
+
+code:
+  background_color: '64549f'  # Set background color to purple
+  font_color: 'ffffff'        # Set text color to white
+  border_radius: 4            # Optional: adds rounded corners

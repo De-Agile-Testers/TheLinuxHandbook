@@ -1,0 +1,87 @@
+== Networking Commands
+
+=== `ping` - Send ICMP ECHO_REQUEST to Network Hosts
+
+The `ping` command is used to check connectivity to a host.
+
+.Example: Check connectivity to a host
+[source, bash]
+----
+$ ping google.com
+----
+
+=== `ifconfig` - Configure a Network Interface
+
+The `ifconfig` command is deprecated. Use `ip` instead.
+
+=== `ip` - Show/Manipulate Routing, Devices, Policy Routing, and Tunnels
+
+The `ip` command is used to show or manipulate routing, devices, policy routing, and tunnels.
+
+.Example: Show all IP addresses
+[source, bash]
+----
+$ ip a
+----
+
+.Example: Bring an interface up
+[source, bash]
+----
+$ ip link set eth0 up
+----
+
+=== `netstat` - Print Network Connections
+
+The `netstat` command is deprecated. Use `ss` instead.
+
+=== `ss` - Investigate Sockets
+
+The `ss` command is used to investigate sockets.
+
+.Example: List all listening ports
+[source, bash]
+----
+$ ss -tuln
+----
+
+=== `curl` - Transfer Data from or to a Server
+
+The `curl` command is used to transfer data from or to a server.
+
+.Example: Download a webpage
+[source, bash]
+----
+$ curl http://example.com
+----
+
+.Example: Download a file
+[source, bash]
+----
+$ curl -O http://example.com/file.zip
+----
+
+=== `wget` - Non-Interactive Network Downloader
+
+The `wget` command is used to download files non-interactively.
+
+.Example: Download a file
+[source, bash]
+----
+$ wget http://example.com/file.zip
+----
+
+=== `nc` (Netcat) - Read and Write Network Connections
+
+The `nc` (Netcat) command is used for reading and writing network connections.
+
+.Example: Listen on port 1234
+[source, bash]
+----
+$ nc -l 1234
+----
+
+.Example: Connect to port 1234 on a host
+[source, bash]
+----
+$ nc hostname 1234
+----

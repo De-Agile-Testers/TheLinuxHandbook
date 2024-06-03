@@ -1,0 +1,331 @@
+== File Management Commands
+
+=== `cd` - Change Directory
+
+The `cd` command is used to change the current working directory.
+
+.Example: Change to the user's home directory
+[source, bash]
+----
+$ cd ~
+----
+
+.Example: Change to a specific directory
+[source, bash]
+----
+$ cd /path/to/directory
+----
+
+.Example: Change to the parent directory
+[source, bash]
+----
+$ cd ..
+----
+
+.Example: Change to the previous directory (using the `cd` command with a hyphen)
+[source, bash]
+----
+$ cd -
+----
+
+=== `mkdir` - Create Directories
+
+The `mkdir` command is used to create directories.
+
+.Example: Create a single directory
+[source, bash]
+----
+$ mkdir directory_name
+----
+
+.Example: Create multiple directories
+[source, bash]
+----
+$ mkdir dir1 dir2 dir3
+----
+
+.Example: Create a directory with specific permissions
+[source, bash]
+----
+$ mkdir -m 755 directory_name
+----
+
+=== `rmdir` - Remove Directories
+
+The `rmdir` command is used to remove directories.
+
+.Example: Remove an empty directory
+[source, bash]
+----
+$ rmdir directory_name
+----
+
+.Example: Remove multiple empty directories
+[source, bash]
+----
+$ rmdir dir1 dir2 dir3
+----
+
+
+
+=== `ls` - List Directory Contents
+
+The `ls` command is used to list the contents of a directory.
+
+.Example: List all files and directories in the current directory
+[source, bash]
+----
+$ ls
+----
+
+.Example: View detailed information with file sizes in a human-readable format
+[source, bash]
+----
+$ ls -lh
+----
+
+.Example: Sort by modification time (most recent first)
+[source, bash]
+----
+$ ls -lt
+----
+
+.Example: Include hidden files (those starting with a dot)
+[source, bash]
+----
+$ ls -a
+----
+
+.Example: Create an alias for your favorite `ls` combination
+[source, bash]
+----
+$ alias lsl='ls -lh --color=auto'
+----
+
+
+=== `cp` - Copy Files and Directories
+
+The `cp` command is used to copy files and directories.
+
+.Example: Copy a file to a destination directory
+[source, bash]
+----
+$ cp file.txt destination/
+----
+
+.Example: Copy a directory and its contents recursively to a destination directory
+[source, bash]
+----
+$ cp -r directory/ destination/
+----
+
+.Example: Preserve the original file attributes (permissions, timestamps, etc.) during copy
+[source, bash]
+----
+$ cp -a file.txt destination/
+----
+
+.Example: Prompt before overwriting an existing file
+[source, bash]
+----
+$ cp -i source/file.txt destination/
+----
+
+.Example: Display progress while copying files
+[source, bash]
+----
+$ cp -v file.txt destination/
+----
+
+=== `mv` - Move and Rename Files and Directories
+
+The `mv` command is used to move and rename files and directories.
+
+.Example: Move a file to a destination directory
+[source, bash]
+----
+$ mv file.txt destination/
+----
+
+.Example: Rename a file
+[source, bash]
+----
+$ mv oldfile.txt newfile.txt
+----
+
+.Example: Move a directory and its contents to a new location
+[source, bash]
+----
+$ mv directory/ new_location/
+----
+
+.Example: Move multiple files to a destination directory
+[source, bash]
+----
+$ mv file1.txt file2.txt destination/
+----
+
+.Example: Move a file and preserve the original file attributes
+[source, bash]
+----
+$ mv -p file.txt destination/
+----
+
+=== `rm` - Remove Files and Directories
+
+The `rm` command is used to remove files and directories.
+
+.Example: Remove a file
+[source, bash]
+----
+$ rm file.txt
+----
+
+.Example: Remove a directory and its contents recursively
+[source, bash]
+----
+$ rm -r directory/
+----
+
+.Example: Forcefully remove files without prompting for confirmation
+[source, bash]
+----
+$ rm -f file.txt
+----
+
+.Example: Remove a directory only if it is empty
+[source, bash]
+----
+$ rmdir directory/
+----
+
+.Example: Remove multiple files at once
+[source, bash]
+----
+$ rm file1.txt file2.txt
+----
+
+=== `find` - Search for Files and Directories
+
+The `find` command is used to search for files and directories in a directory hierarchy.
+
+.Example: Find files with a specific name in the current directory
+[source, bash]
+----
+$ find . -name "filename.txt"
+----
+
+.Example: Find files modified in the last 7 days
+[source, bash]
+----
+$ find . -mtime -7
+----
+
+.Example: Find directories with a specific name
+[source, bash]
+----
+$ find . -type d -name "dirname"
+----
+
+.Example: Find files of a specific type (e.g., text files)
+[source, bash]
+----
+$ find . -type f -name "*.txt"
+----
+
+.Example: Execute a command on the found files (e.g., delete)
+[source, bash]
+----
+$ find . -type f -name "*.tmp" -exec rm {} +
+----
+
+
+=== `du` - Estimate File Space Usage
+
+The `du` command is used to estimate file space usage.
+
+.Example: Display disk usage for the current directory
+[source, bash]
+----
+$ du
+----
+
+.Example: Display disk usage in human-readable format
+[source, bash]
+----
+$ du -h
+----
+
+.Example: Display disk usage for a specific directory
+[source, bash]
+----
+$ du -h /path/to/directory
+----
+
+.Example: Display total disk usage for multiple directories
+[source, bash]
+----
+$ du -h /path/to/directory1 /path/to/directory2
+----
+
+.Example: Display disk usage only for directories, not individual files
+[source, bash]
+----
+$ du -h --max-depth=1
+----
+
+=== `df` - Report File System Disk Space Usage
+
+The `df` command is used to report file system disk space usage.
+
+.Example: Display disk space usage for all mounted file systems
+[source, bash]
+----
+$ df
+----
+
+.Example: Display disk space usage in human-readable format
+[source, bash]
+----
+$ df -h
+----
+
+.Example: Display disk space usage for a specific file system
+[source, bash]
+----
+$ df -h /dev/sda1
+----
+
+.Example: Display disk space usage for specific file systems
+[source, bash]
+----
+$ df -h /dev/sda1 /dev/sdb1
+----
+
+.Example: Display disk space usage with total and available space in 1K blocks
+[source, bash]
+----
+$ df -k
+----
+
+=== `ln` - Create Symbolic Links
+
+The `ln` command is used to create symbolic links to files or directories.
+
+.Example: Create a symbolic link to a file
+[source, bash]
+----
+$ ln -s file1.txt link1.txt
+----
+
+.Example: Create a symbolic link to a directory
+[source, bash]
+----
+$ ln -s directory1 directory2
+----
+
+.Example: Create a symbolic link with an absolute path
+[source, bash]
+----
+$ ln -s /path/to/file1.txt link1.txt
+----

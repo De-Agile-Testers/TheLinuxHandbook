@@ -1,0 +1,98 @@
+---
+name: "Bump Asciidoctor-Diagram version"
+
+scms:
+  default:
+    kind: github
+    spec:
+      user: "{{ .github.user }}"
+      email: "{{ .github.email }}"
+      owner: "{{ requiredEnv .github.owner }}"
+      repository: "{{ requiredEnv .github.repository }}"
+      token: "{{ requiredEnv .github.token }}"
+      username: "{{ .github.username }}"
+      branch: "{{ .github.branch }}"
+  asciidoctor-diagram:
+    kind: git
+    spec:
+      url: https://github.com/asciidoctor/asciidoctor-diagram
+      branch: master
+
+sources:
+  latestVersion:
+    kind: gittag
+    name: "Get the latest Asciidoctor-Diagram version from latest git tag (no GitHub release)"
+    scmid: asciidoctor-diagram
+    spec:
+      versionfilter:
+        kind: latest
+    transformers:
+      - trimprefix: "v"
+
+conditions:
+  checkIfGemIsPublished:
+    name: "Check if the Gem is published"
+    kind: shell
+    disablesourceinput: true
+    spec:
+      command: curl --fail --location --output /dev/null https://rubygems.org/downloads/asciidoctor-diagram-{{ source "latestVersion" }}.gem
+  testDockerfileArgVersion:
+    name: "Does the Dockerfile have an ARG instruction which key is asciidoctor_diagram_version?"
+    kind: dockerfile
+    disablesourceinput: true
+    spec:
+      file: Dockerfile
+      instruction:
+        keyword: "ARG"
+        matcher: "asciidoctor_diagram_version"
+  testVersionInReadme:
+    name: "Does the README.adoc have a variable ASCIIDOCTOR_DIAGRAM_VERSION"
+    kind: file
+    disablesourceinput: true
+    spec:
+      file: README.adoc
+      matchpattern: "(?m:^:ASCIIDOCTOR_DIAGRAM_VERSION:.*)"
+  testVersionInTestHarness:
+    name: "Does the test harness have variable ASCIIDOCTOR_DIAGRAM_VERSION"
+    kind: file
+    disablesourceinput: true
+    spec:
+      file: tests/asciidoctor.bats
+      matchpattern: "(?m:^ASCIIDOCTOR_DIAGRAM_VERSION=.*)"
+
+targets:
+  updateDockerfile:
+    name: "Update the value of ARG asciidoctor_diagram_version in the Dockerfile"
+    kind: dockerfile
+    spec:
+      file: Dockerfile
+      instruction:
+        keyword: "ARG"
+        matcher: "asciidoctor_diagram_version"
+    scmid: default
+  updateTestHarness:
+    name: "Update the key ASCIIDOCTOR_DIAGRAM_VERSION in the test harness"
+    kind: file
+    spec:
+      file: tests/asciidoctor.bats
+      matchpattern: "(?m:^ASCIIDOCTOR_DIAGRAM_VERSION=.*)"
+      content: 'ASCIIDOCTOR_DIAGRAM_VERSION={{ source `latestVersion` }}'
+    scmid: default
+  updateReadme:
+    name: "Update the key ASCIIDOCTOR_DIAGRAM_VERSION in the README.adoc file"
+    kind: file
+    spec:
+      file: README.adoc
+      matchpattern: "(?m:^:ASCIIDOCTOR_DIAGRAM_VERSION:.*)"
+      content: ':ASCIIDOCTOR_DIAGRAM_VERSION: {{ source `latestVersion` }}'
+    scmid: default
+
+actions:
+  default:
+    kind: github/pullrequest
+    scmid: default
+    title: Bump Asciidoctor-Diagram version {{ source "latestVersion" }}
+    spec:
+      labels:
+        - dependencies
+        - asciidoctor-diagram

@@ -1,0 +1,71 @@
+== Process Management Commands
+
+=== `ps` - Report a Snapshot of Current Processes
+
+The `ps` command is used to report a snapshot of current processes.
+
+.Example: Display all running processes
+[source, bash]
+----
+$ ps aux
+----
+
+=== `top` - Display Linux Tasks
+
+The `top` command provides an interactive, real-time view of running processes.
+
+=== `htop` - Interactive Process Viewer
+
+`htop` is an enhanced version of `top` for viewing processes interactively.
+
+=== `kill` - Send a Signal to a Process
+
+The `kill` command is used to send a signal to a process.
+
+.Example: Forcefully terminate a process with a specific PID
+[source, bash]
+----
+$ kill -9 PID
+----
+
+=== `pkill` - Send a Signal to Processes by Name
+
+The `pkill` command is used to send a signal to processes by name.
+
+.Example: Kill processes by name
+[source, bash]
+----
+$ pkill -f processname
+----
+
+=== `nice` and `renice` - Modify Scheduling Priority
+
+The `nice` and `renice` commands are used to run a program with modified scheduling priority.
+
+.Example: Run a command with a lower priority
+[source, bash]
+----
+$ nice -n 10 command
+----
+
+.Example: Change the priority of an existing process
+[source, bash]
+----
+$ renice 10 -p PID
+----
+
+=== `bg` and `fg` - Manage Jobs in the Background and Foreground
+
+The `bg` and `fg` commands are used to manage jobs in the background and foreground.
+
+.Example: Resume job `1` in the background
+[source, bash]
+----
+$ bg %1
+----
+
+.Example: Bring job `1` to the foreground
+[source, bash]
+----
+$ fg %1
+----
