@@ -1,0 +1,5 @@
+[title-page]
+image:images/voorblad.png[]
+
+[title_page_title]
+{doctitle}

@@ -118,3 +118,5 @@ Process substitution allows you to pass the output of a command as an input to a
 ----
 $ diff <(ls dir1) <(ls dir2)
 ----
+
+<<<

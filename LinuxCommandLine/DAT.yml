@@ -16,14 +16,20 @@ heading:
 # Page layout
 page:
   background:
-    color: '4cc7e8'
+    color: 'FFFFFF'
   margin: [36, 48, 70, 48]  # top, right, bottom, left
 
 title-page-content:
+  title:
+    align: center
+    top: 150
   margin-top: 0
   margin-bottom: 0
   text-align: center
   line-height: 1.5
+
+title-page:
+  background-image: images/voorblad.png
 
 image:
   align: center
@@ -64,16 +70,20 @@ footer:
   line-height: 1
   recto:
     right:
-      content: '{chapter-title} | *{page-number}*'
+      content: '{chapter-title}'
     left:
       content: image:DAT.png[width=20%,align=left]
+    center:
+      content: '- *{page-number}* -'
   verso:
-    right:
-      content: '{chapter-title} | *{page-number}*'
     left:
+      content: '{chapter-title}'
+    right:
       content: image:DAT.png[width=20%,align=left]
+    center:
+      content: '- *{page-number}* -'
 
 code:
-  background_color: '64549f'  # Set background color to purple
-  font_color: 'ffffff'        # Set text color to white
+  background_color: 'e6f1f5'  # Set background color to purple
+  font_color: '64549f'        # Set text color to white
   border_radius: 4            # Optional: adds rounded corners

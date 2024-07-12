@@ -7,8 +7,8 @@
 :sectnums:
 
 :title-logo-image: image:DAT.png[top=25%,align=center,pdfwidth=0.5in]
-
 toc::[]
+
 
 include::chapters/01.Introduction.adoc[]
 include::chapters/02.FileSystem.adoc[]

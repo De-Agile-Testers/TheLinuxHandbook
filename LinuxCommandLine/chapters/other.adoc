@@ -91,3 +91,5 @@ The `patch` command is used to apply a diff file to an original.
 ----
 $ patch < changes.diff
 ----
+
+<<<

@@ -329,3 +329,5 @@ $ ln -s directory1 directory2
 ----
 $ ln -s /path/to/file1.txt link1.txt
 ----
+
+<<<

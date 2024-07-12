@@ -92,3 +92,4 @@ $ find . -name "*.py" | xargs -I {} python -m py_compile {} 2>&1 | grep "SyntaxE
 * `2>&1`: Redirects stderr to stdout.
 * `grep "SyntaxError"`: Filters the output to show only syntax errors.
 
+<<<
