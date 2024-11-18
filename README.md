@@ -1,3 +1,30 @@
+# The Linux Command Line Handbook
+
+The Linux Command Line Handbook is generated with asciidoctor-pdf, a document converter. 
+Asciidoctor-pdf converts asciidoc markup files into a PDF with template support.
+
+The Linux command line handbook asciidoc files reside in the LinuxCommandLine folder.
+
+## PDF generation
+### prerequisites
+
+Docker is needed to generate the document. The docker container contains all asciidoc tools.
+To start up the docker container with all available asciidoctor tools, navigate to the LinuxCommandLine folder,
+and execute the following command:
+
+    docker run -it -u $(id -u):$(id -g) -v .:/documents/ asciidoctor/docker-asciidoctor
+
+First time docker will pull the image, start it up and mount the current local directory with de documents folder 
+inside the docker container.
+
+To generate the PDF document, simply execute the following command.
+
+    asciidoctor-pdf main.adoc
+
+After the conversion, just type exit in the container prompt. 
+The pdf document resides in the LinuxCommandLine folder. Enjoy! 
+
+
 # Asciidoctor Docker Container
 
 ## The environment
