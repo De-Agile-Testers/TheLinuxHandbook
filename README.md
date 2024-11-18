@@ -8,21 +8,27 @@ The Linux command line handbook asciidoc files reside in the LinuxCommandLine fo
 ## PDF generation
 ### prerequisites
 
-Docker is needed to generate the document. The docker container contains all asciidoc tools.
+Docker is needed to generate the document. 
+For installation:
+On windows: https://docs.docker.com/desktop/setup/install/windows-install/  
+On Mac: https://docs.docker.com/desktop/setup/install/mac-install/  
+On Linux : https://docs.docker.com/engine/install/
+
+The docker image in this project contains all asciidoc tools.  
 To start up the docker container with all available asciidoctor tools, navigate to the LinuxCommandLine folder,
 and execute the following command:
 
-    docker run -it -u $(id -u):$(id -g) -v .:/documents/ asciidoctor/docker-asciidoctor
+    start-asciidoctor.sh
 
 First time docker will pull the image, start it up and mount the current local directory with de documents folder 
-inside the docker container.
-
+inside the docker container.  
 To generate the PDF document, simply execute the following command.
 
     asciidoctor-pdf main.adoc
 
-After the conversion, just type exit in the container prompt. 
-The pdf document resides in the LinuxCommandLine folder. Enjoy! 
+After the conversion, just type exit in the container prompt.  
+The pdf document resides in the LinuxCommandLine folder.  
+Enjoy! 
 
 
 # Asciidoctor Docker Container
